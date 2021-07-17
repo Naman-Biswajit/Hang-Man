@@ -10,6 +10,7 @@ height = 600
 bg_color = (255, 255, 255)
 text_color = (227, 156, 134)
 text_font = pygame.font.SysFont('comicsansms', 35)
+ans_font = pygame.font.SysFont('arial', 80)
 
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption('Hang Man')
@@ -18,6 +19,8 @@ Ticks = 50
 clock = pygame.time.Clock()
 step = 0  # value for Hanging Status
 gameloop = True
+word = "TEST"
+guessed_letters = []
 
 radius = 25
 offest = 20
@@ -54,6 +57,9 @@ for let in range(26):
     btns.append([x, y, chr(65 + let), True])
 
 def compose():
+
+    show_wd = ''
+
     for char in btns:
         # print(char)
         x, y, letter, show = char
@@ -64,6 +70,17 @@ def compose():
             screen.blit(text, (x - text.get_width() /
                         2, y - text.get_height() / 2))
 
+    for letter in word:
+        if letter in guessed_letters:
+            show_wd += letter + ' '
+        
+        else:
+            show_wd += '_ '
+
+    txt = ans_font.render(show_wd, 1, (245, 213, 127))
+    screen.blit(txt, (650, 260))
+
+    
 
 while gameloop:
     hang_man(100, 100)
