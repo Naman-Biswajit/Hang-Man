@@ -92,14 +92,12 @@ def result(won: bool):
     update = False
 
 def all_guessed():
-    if guessed_letters == []:
+    if len(guessed_letters) == 0:
         return False
 
-    for letter in guessed_letters:
-        if str(letter) not in word and not len(guessed_letters) == len(word):
+    for letter in word:
+        if str(letter) not in guessed_letters:
             return False
-        else:
-            pass
     
     return True
 
@@ -117,11 +115,12 @@ while gameloop:
             # Checking for quit event
         
         elif step == 5:
+            print('indeed', step)
             result(False)
             pygame.display.update()
 
         elif all_guessed():
-            result(False)
+            result(True)
             pygame.display.update()
 
 
