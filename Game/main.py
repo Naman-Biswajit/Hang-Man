@@ -10,7 +10,7 @@ height = 600
 bg_color = (255, 255, 255)
 text_color = (227, 156, 134)
 text_font = pygame.font.SysFont('comicsansms', 35)
-ans_font = pygame.font.SysFont('arial', 80)
+ans_font = pygame.font.SysFont('comicsans', 90)
 
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption('Hang Man')
@@ -78,7 +78,7 @@ def compose():
             show_wd += '_ '
 
     txt = ans_font.render(show_wd, 1, (245, 213, 127))
-    screen.blit(txt, (650, 260))
+    screen.blit(txt, (540, 215))
 
     
 
@@ -96,7 +96,7 @@ while gameloop:
 
             # Checking for quit event
 
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             ms_x, ms_y = pygame.mouse.get_pos()
 
             for letter in btns:
@@ -106,10 +106,11 @@ while gameloop:
                     distance = math.sqrt((x - ms_x) ** 2 + (y - ms_y) ** 2)
 
                     if distance < radius:
-                        log = letter
                         letter[3] = False
+                        guessed_letters.append(let)
                         
-        if log is not None:
-            print(log)
+                        step += 1 if let not in word else 0
+                        print(let, x, y)
+                        
 
     pygame.display.update()
