@@ -11,9 +11,11 @@ bg_color = (255, 255, 255)
 text_color = (227, 156, 134)
 text_font = pygame.font.SysFont('comicsansms', 35)
 ans_font = pygame.font.SysFont('comicsans', 90)
+res_font = pygame.font.SysFont('comicsans', 150)
 
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption('Hang Man')
+update = True
 
 Ticks = 50
 clock = pygame.time.Clock()
@@ -80,23 +82,50 @@ def compose():
     txt = ans_font.render(show_wd, 1, (245, 213, 127))
     screen.blit(txt, (540, 215))
 
+def result(won: bool):
+    global update, step
     
+    result = ['You Won!', (54, 134, 255)] if won else ['You Lost!', (255, 54, 54)]
+    text = res_font.render(result[0], 1, result[1 ])
+    screen.fill((255, 255, 255))
+    screen.blit(text, (260, 200))
+    update = False
+
+def all_guessed():
+    if guessed_letters == []:
+        return False
+
+    for letter in guessed_letters:
+        if str(letter) not in word and not len(guessed_letters) == len(word):
+            return False
+        else:
+            pass
+    
+    return True
 
 while gameloop:
     hang_man(100, 100)
-
     compose()
 
     for event in pygame.event.get():
         log = None
-
+        
         if event.type == pygame.QUIT:
             gameloop = False
             print('QUIT')
 
             # Checking for quit event
+        
+        elif step == 5:
+            result(False)
+            pygame.display.update()
 
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        elif all_guessed():
+            result(False)
+            pygame.display.update()
+
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             ms_x, ms_y = pygame.mouse.get_pos()
 
             for letter in btns:
@@ -112,5 +141,4 @@ while gameloop:
                         step += 1 if let not in word else 0
                         print(let, x, y)
                         
-
-    pygame.display.update()
+    pygame.display.update() if update else None
