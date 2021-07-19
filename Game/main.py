@@ -1,7 +1,8 @@
 import pygame
 import os
 import math
-import time
+import random
+
 
 pygame.init()
 
@@ -21,7 +22,6 @@ Ticks = 50
 clock = pygame.time.Clock()
 step = 0  # value for Hanging Status
 gameloop = True
-word = "TEST"
 guessed_letters = []
 
 radius = 25
@@ -30,8 +30,17 @@ btns = []
 x_onset = round((width - (radius * 2 + offest) * 13) / 2)
 y_onset = 450
 
-
+words = ['ape', 'bat', 'bear', 'panada', 'cat', 'dog', 'fish', 'camel', 'cow', 'crow', 'crane', 'crab',
+         'cheetah', 'tiger', 'lion', 'rat', 'deer', 'dodo', 'donkey', 'duck', 'eagle', 'emu', 'ant', 'frog',
+         'fox', 'falcon', 'goat', 'giraffe', 'seal', 'pig', 'bee', 'human', 'man', 'hamster', 'horse',
+         'hyena', 'jaguar', 'kiwi', 'dove', 'lizard', 'lynx', 'leopard', 'llama', 'locust', 'mouse',
+         'mice', 'shark', 'whale', 'octopus', 'penguin', 'pigeion', 'pika', 'puma', 'bug', 'snake',
+         'python', 'squid', 'swan', 'wolf', 'zebra', 'bird', 'rabbit']
 # Fun fact: If you reading this I took the images and equation from TechWtiTim some video Lel
+
+word = random.choice(words)
+word = word.upper()
+
 
 def load_imgs(folder: str):
     imgs = []
@@ -58,7 +67,10 @@ for let in range(26):
 
     btns.append([x, y, chr(65 + let), True])
 
+
 def compose():
+
+    global word
 
     show_wd = ''
 
@@ -75,21 +87,24 @@ def compose():
     for letter in word:
         if letter in guessed_letters:
             show_wd += letter + ' '
-        
+
         else:
             show_wd += '_ '
 
     txt = ans_font.render(show_wd, 1, (245, 213, 127))
     screen.blit(txt, (540, 215))
 
+
 def result(won: bool):
     global update, step
-    
-    result = ['You Won!', (54, 134, 255)] if won else ['You Lost!', (255, 54, 54)]
-    text = res_font.render(result[0], 1, result[1 ])
+
+    result = ['You Won!', (54, 134, 255)] if won else [
+        'You Lost!', (255, 54, 54)]
+    text = res_font.render(result[0], 1, result[1])
     screen.fill((255, 255, 255))
     screen.blit(text, (260, 200))
     update = False
+
 
 def all_guessed():
     if len(guessed_letters) == 0:
@@ -98,8 +113,9 @@ def all_guessed():
     for letter in word:
         if str(letter) not in guessed_letters:
             return False
-    
+
     return True
+
 
 while gameloop:
     hang_man(100, 100)
@@ -107,22 +123,20 @@ while gameloop:
 
     for event in pygame.event.get():
         log = None
-        
+
         if event.type == pygame.QUIT:
             gameloop = False
             print('QUIT')
 
             # Checking for quit event
-        
+
         elif step == 5:
-            print('indeed', step)
             result(False)
             pygame.display.update()
 
         elif all_guessed():
             result(True)
             pygame.display.update()
-
 
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             ms_x, ms_y = pygame.mouse.get_pos()
@@ -136,8 +150,8 @@ while gameloop:
                     if distance < radius:
                         letter[3] = False
                         guessed_letters.append(let)
-                        
+
                         step += 1 if let not in word else 0
                         print(let, x, y)
-                        
+
     pygame.display.update() if update else None
